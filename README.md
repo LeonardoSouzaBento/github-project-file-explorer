@@ -1,73 +1,31 @@
-# Welcome to your Lovable project
+# GitHub File Explorer
 
-## Project info
+Um visualizador de arquivos para repositórios públicos do GitHub com uma interface inspirada no VS Code.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## 🚀 O que este projeto faz?
 
-## How can I edit this code?
+Este projeto permite que você explore e visualize o código de qualquer repositório público do GitHub de forma rápida e intuitiva, sem precisar baixar os arquivos ou sair do navegador.
 
-There are several ways of editing your application.
+### Principais Funcionalidades:
 
-**Use Lovable**
+- **Exploração de Repositórios**: Adicione links de repositórios públicos e navegue pela árvore de arquivos.
+- **Visualização de Código**: Veja o conteúdo dos arquivos com realce de sintaxe (syntax highlighting).
+- **Interface Estilo VS Code**: Experiência de navegação familiar com barra lateral de explorador e abas de edição.
+- **Gerenciamento de Repositórios**: Salve múltiplos repositórios para alternar rapidamente entre eles.
+- **Status em Tempo Real**: Barra de status que mostra informações do repositório e contagem de arquivos.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## 🛠️ Tecnologias Utilizadas
 
-Changes made via Lovable will be committed automatically to this repo.
+- **React** (com Vite e TypeScript)
+- **Tailwind CSS** (estilização)
+- **Lucide React** (ícones)
+- **GitHub API** (busca de dados)
+- **React Syntax Highlighter** (exibição de código)
+- **Shadcn UI** (componentes de interface)
 
-**Use your preferred IDE**
+## 📖 Como usar
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+1.  Cole o link de um repositório público do GitHub no campo de entrada.
+2.  Clique em "Adicionar" ou pressione Enter.
+3.  Navegue pela árvore de arquivos na lateral esquerda.
+4.  Clique em um arquivo para abrir o conteúdo no visualizador central.
