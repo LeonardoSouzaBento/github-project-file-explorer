@@ -8,7 +8,9 @@ interface FileExplorerProps {
   loadingMsg: string;
   files: GitHubItem[];
   onFileSelect: StateSetter<GitHubItem | null>;
+  onFolderClick: (folder: GitHubItem) => void;
   activeTab: string | null;
+  activeRepoUrl: string | null;
 }
 
 export const FileExplorer = ({
@@ -16,7 +18,9 @@ export const FileExplorer = ({
   loadingMsg,
   files,
   onFileSelect,
+  onFolderClick,
   activeTab,
+  activeRepoUrl,
 }: FileExplorerProps) => {
   return (
     <div className="w-64 shrink-0 bg-vscode-sidebar border-r border-border flex flex-col overflow-hidden">
@@ -37,11 +41,19 @@ export const FileExplorer = ({
             </div>
           </div>
         )}
-        {!loading && files.length === 0 && (
+        {!loading && !activeRepoUrl && (
           <div className="flex flex-col items-center justify-center h-full gap-2 px-4 text-muted-foreground">
             <FolderGit2 className="w-10 h-10 opacity-30" />
             <p className="text-xs text-center">
-              Adicione um link de repositório público para começar
+              Nenhum projeto selecionado. Selecione um dos projetos para ver os arquivos.
+            </p>
+          </div>
+        )}
+        {!loading && activeRepoUrl && files.length === 0 && (
+          <div className="flex flex-col items-center justify-center h-full gap-2 px-4 text-muted-foreground">
+            <FolderGit2 className="w-10 h-10 opacity-30" />
+            <p className="text-xs text-center">
+              Nenhum arquivo encontrado neste repositório.
             </p>
           </div>
         )}
@@ -49,6 +61,7 @@ export const FileExplorer = ({
           <FileTree
             items={files}
             onFileSelect={onFileSelect}
+            onFolderClick={onFolderClick}
             selectedPath={activeTab || undefined}
           />
         )}

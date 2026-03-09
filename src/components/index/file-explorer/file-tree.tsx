@@ -6,11 +6,12 @@ import { getFileIcon } from "@/lib/github";
 interface FileTreeProps {
   items: GitHubItem[];
   onFileSelect: (item: GitHubItem) => void;
+  onFolderClick?: (folder: GitHubItem) => void;
   selectedPath?: string;
   depth?: number;
 }
 
-export function FileTree({ items, onFileSelect, selectedPath, depth = 0 }: FileTreeProps) {
+export function FileTree({ items, onFileSelect, onFolderClick, selectedPath, depth = 0 }: FileTreeProps) {
   return (
     <ul className="select-none">
       {items.map((item) => (
@@ -18,6 +19,7 @@ export function FileTree({ items, onFileSelect, selectedPath, depth = 0 }: FileT
           key={item.path}
           item={item}
           onFileSelect={onFileSelect}
+          onFolderClick={onFolderClick}
           selectedPath={selectedPath}
           depth={depth}
         />
@@ -29,11 +31,13 @@ export function FileTree({ items, onFileSelect, selectedPath, depth = 0 }: FileT
 function FileTreeNode({
   item,
   onFileSelect,
+  onFolderClick,
   selectedPath,
   depth,
 }: {
   item: GitHubItem;
   onFileSelect: (item: GitHubItem) => void;
+  onFolderClick?: (folder: GitHubItem) => void;
   selectedPath?: string;
   depth: number;
 }) {
@@ -50,6 +54,9 @@ function FileTreeNode({
         style={{ paddingLeft: `${depth * 16 + 8}px` }}
         onClick={() => {
           if (isDir) {
+            if (!open && !item.children) {
+              onFolderClick?.(item);
+            }
             setOpen(!open);
           } else {
             onFileSelect(item);
@@ -81,6 +88,7 @@ function FileTreeNode({
         <FileTree
           items={item.children}
           onFileSelect={onFileSelect}
+          onFolderClick={onFolderClick}
           selectedPath={selectedPath}
           depth={depth + 1}
         />

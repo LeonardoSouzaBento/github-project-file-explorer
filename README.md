@@ -1,4 +1,4 @@
-## Explorador de arquivos de projetos abertos do GitHub 
+## Explorador de arquivos de projetos abertos do GitHub
 
 Um visualizador de arquivos para repositórios públicos do GitHub com uma interface inspirada no VS Code.
 
@@ -12,16 +12,25 @@ Um visualizador de arquivos para repositórios públicos do GitHub com uma inter
     npm install github-project-file-explorer
     ```
 
-2.  **Importe o componente e o CSS:**
+2.  **Pegue seu token de acesso**
+
+Acesse o link https://github.com/settings/tokens e nevegue por "Personal Acess Token" > "Tokens(Classic)".
+Clique em "Generate New Token". Marque as primeiras permissões e outras referente a leitura. Obtenha o token.
+
+3.  **Importe o componente e o CSS:**
 
     ```tsx
-    import { Index as GitHubFilesExplorer } from 'github-project-file-explorer';
-    import 'github-project-file-explorer/dist/style.css';
+    import { Index as GitHubFilesExplorer } from "github-project-file-explorer";
+    import "github-project-file-explorer/dist/style.css";
 
     function App() {
       return (
-        <GitHubFilesExplorer 
-          repoUrls={["https://github.com/facebook/react", "https://github.com/vercel/next.js"]}
+        <GitHubFilesExplorer
+          repoUrls={[
+            "https://github.com/facebook/react",
+            "https://github.com/vercel/next.js",
+          ]}
+          githubToken={"seu_token_aqui"}
           cssWrapper="min-h-[600px] border rounded-lg"
         />
       );
@@ -34,6 +43,7 @@ Um visualizador de arquivos para repositórios públicos do GitHub com uma inter
 2.  Clique em "Adicionar" ou pressione Enter.
 3.  Navegue pela árvore de arquivos na lateral esquerda.
 4.  Clique em um arquivo para abrir o conteúdo no visualizador central.
+
 ## 🚀 O que este projeto faz?
 
 Este projeto permite que você explore e visualize o código de qualquer repositório público do GitHub de forma rápida e intuitiva, sem precisar baixar os arquivos ou sair do navegador.

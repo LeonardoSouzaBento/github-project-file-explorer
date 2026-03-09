@@ -18,9 +18,10 @@ interface CodeViewerProps {
   setTabs: React.Dispatch<React.SetStateAction<Tab[]>>;
   activeTab: string | null;
   setActiveTab: (path: string | null) => void;
+  githubToken: string;
 }
 
-export function CodeViewer({ selectedFile, tabs, setTabs, activeTab, setActiveTab }: CodeViewerProps) {
+export function CodeViewer({ selectedFile, tabs, setTabs, activeTab, setActiveTab, githubToken }: CodeViewerProps) {
   useEffect(() => {
     if (!selectedFile || selectedFile.type === "dir") return;
 
@@ -31,7 +32,7 @@ export function CodeViewer({ selectedFile, tabs, setTabs, activeTab, setActiveTa
       setActiveTab(selectedFile.path);
 
       if (selectedFile.download_url) {
-        fetchFileContent(selectedFile.download_url)
+        fetchFileContent(selectedFile.download_url, githubToken)
           .then((content) => {
             setTabs((prev) =>
               prev.map((t) =>

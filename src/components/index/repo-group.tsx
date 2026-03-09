@@ -1,5 +1,5 @@
 import { FolderGit2, X, Plus } from "lucide-react";
-import { fetchAllFiles, type GitHubItem } from "@/lib/github";
+import { fetchInitialFiles, type GitHubItem } from "@/lib/github";
 import { type SavedRepo, type StateSetter, type Tab } from "@/types";
 
 interface RepoGroupProps {
@@ -18,6 +18,7 @@ interface RepoGroupProps {
   setShowInput: StateSetter<boolean>;
   setInputSuccess: StateSetter<string>;
   inputRef: React.RefObject<HTMLInputElement>;
+  githubToken: string;
 }
 
 const MAX_BUTTON_CHARS = 18;
@@ -42,6 +43,7 @@ export const RepoGroup = ({
   setShowInput,
   setInputSuccess,
   inputRef,
+  githubToken,
 }: RepoGroupProps) => {
   const handleSelectRepo = async (repo: SavedRepo) => {
     if (activeRepoUrl === repo.url) return;
@@ -54,7 +56,7 @@ export const RepoGroup = ({
     setSelectedFile(null);
 
     try {
-      const allFiles = await fetchAllFiles(repo.owner, repo.repo, "", setLoadingMsg);
+      const allFiles = await fetchInitialFiles(repo.owner, repo.repo, githubToken, setLoadingMsg);
       setFiles(allFiles);
     } catch (err) {
       setInputError(err.message || "Erro ao buscar repositório");
@@ -88,7 +90,7 @@ export const RepoGroup = ({
             className={`flex items-center gap-1.5 px-3 py-1.5 text-sm rounded shrink-0 transition-colors group ${
               activeRepoUrl === repo.url
                 ? "bg-primary text-primary-foreground"
-                : "bg-vscode-tab-inactive text-muted-foreground hover:bg-vscode-explorer-hover hover:text-foreground"
+                : "bg-vscode-explorer-hover text-foreground"
             }`}
           >
             <FolderGit2 className="w-3.5 h-3.5 shrink-0" />
