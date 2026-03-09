@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "allowImportingTsExtensions": true,
+    "esModuleInterop": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
     "lib": [
@@ -10,8 +10,9 @@
     ],
     "module": "ESNext",
     "moduleDetection": "force",
-    "moduleResolution": "bundler",
-    "noEmit": true,
+    "moduleResolution": "node",
+    "noEmit": false,
+    "composite": true,
     "noFallthroughCasesInSwitch": false,
     "noImplicitAny": false,
     "noUnusedLocals": false,

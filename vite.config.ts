@@ -1,21 +1,30 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
-import path from "path";
-import { componentTagger } from "lovable-tagger";
+import * as path from "path";
+import dts from "vite-plugin-dts";
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  server: {
-    host: "::",
-    port: 3009,
-    hmr: {
-      overlay: false,
+export default defineConfig({
+  plugins: [react(), dts({ insertTypesEntry: true, tsconfigPath: "./tsconfig.app.json" })],
+  build: {
+    lib: {
+      entry: path.resolve(__dirname, "src/pages/Index.tsx"),
+      name: "GitFileExplorer",
+      formats: ["es", "umd"],
+      fileName: (format) => `git-file-explorer.${format}.js`,
+    },
+    rollupOptions: {
+      external: ["react", "react-dom"],
+      output: {
+        globals: {
+          react: "React",
+          "react-dom": "ReactDOM",
+        },
+      },
     },
   },
-  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
-}));
+});

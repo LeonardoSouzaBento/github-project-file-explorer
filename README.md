@@ -2,6 +2,38 @@
 
 Um visualizador de arquivos para repositórios públicos do GitHub com uma interface inspirada no VS Code.
 
+## 📖 Como usar
+
+### Como um Pacote NPM
+
+1.  **Instale o pacote:**
+
+    ```bash
+    npm install @seu-usuario/git-file-explorer
+    ```
+
+2.  **Importe o componente e o CSS:**
+
+    ```tsx
+    import { Index as GitExplorer } from '@seu-usuario/git-file-explorer';
+    import '@seu-usuario/git-file-explorer/dist/style.css';
+
+    function App() {
+      return (
+        <GitExplorer 
+          repoUrls={["https://github.com/facebook/react", "https://github.com/vercel/next.js"]}
+          cssWrapper="min-h-[600px] border rounded-lg"
+        />
+      );
+    }
+    ```
+
+### Como um Projeto Independente
+
+1.  Cole o link de um repositório público do GitHub no campo de entrada.
+2.  Clique em "Adicionar" ou pressione Enter.
+3.  Navegue pela árvore de arquivos na lateral esquerda.
+4.  Clique em um arquivo para abrir o conteúdo no visualizador central.
 ## 🚀 O que este projeto faz?
 
 Este projeto permite que você explore e visualize o código de qualquer repositório público do GitHub de forma rápida e intuitiva, sem precisar baixar os arquivos ou sair do navegador.
@@ -22,10 +54,3 @@ Este projeto permite que você explore e visualize o código de qualquer reposit
 - **GitHub API** (busca de dados)
 - **React Syntax Highlighter** (exibição de código)
 - **Shadcn UI** (componentes de interface)
-
-## 📖 Como usar
-
-1.  Cole o link de um repositório público do GitHub no campo de entrada.
-2.  Clique em "Adicionar" ou pressione Enter.
-3.  Navegue pela árvore de arquivos na lateral esquerda.
-4.  Clique em um arquivo para abrir o conteúdo no visualizador central.

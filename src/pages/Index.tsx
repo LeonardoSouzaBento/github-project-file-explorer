@@ -1,13 +1,11 @@
 import { CodeViewer } from "@/components/index/code-viewer";
-import {
-  AddLinkButton,
-  CloseInputButton,
-  FileExplorer,
-  InputArea,
-  RepoGroup,
-  StatusBar,
-  TitleBar,
-} from "@/components/index/index";
+import { AddLinkButton } from "@/components/index/add-link-button";
+import { CloseInputButton } from "@/components/index/close-input-button";
+import { FileExplorer } from "@/components/index/file-explorer";
+import { InputArea } from "@/components/index/input-area";
+import { RepoGroup } from "@/components/index/repo-group";
+import { StatusBar } from "@/components/index/status-bar";
+import { TitleBar } from "@/components/index/title-bar";
 import { fetchAllFiles, parseRepoUrl, type GitHubItem } from "@/lib/github";
 import { cn } from "@/lib/utils";
 import { type SavedRepo, type Tab } from "@/types";
@@ -25,8 +23,8 @@ const Index = ({
   repoUrls,
   cssWrapper,
 }: {
-  repoUrls: string[];
-  cssWrapper: string;
+  repoUrls?: string[];
+  cssWrapper?: string;
 }) => {
   const [repoUrl, setRepoUrl] = useState("");
   const [files, setFiles] = useState<GitHubItem[]>([]);

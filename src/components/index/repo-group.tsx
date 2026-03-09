@@ -1,5 +1,4 @@
 import { FolderGit2, X, Plus } from "lucide-react";
-import React from "react";
 import { fetchAllFiles, type GitHubItem } from "@/lib/github";
 import { type SavedRepo, type StateSetter, type Tab } from "@/types";
 

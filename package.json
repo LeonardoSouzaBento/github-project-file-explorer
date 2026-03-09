@@ -1,16 +1,30 @@
 {
-  "name": "vite_react_shadcn_ts",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@seu-usuario/git-file-explorer",
+  "private": false,
+  "version": "1.0.0",
   "type": "module",
+  "main": "./dist/git-file-explorer.umd.js",
+  "module": "./dist/git-file-explorer.es.js",
+  "types": "./dist/pages/Index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/git-file-explorer.es.js",
+      "require": "./dist/git-file-explorer.umd.js",
+      "types": "./dist/pages/Index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "preview": "vite preview"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -86,6 +100,7 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
     "vite": "^5.4.19",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "vite-plugin-dts": "^3.9.1"
   }
 }
