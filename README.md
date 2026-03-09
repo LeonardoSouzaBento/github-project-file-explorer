@@ -1,4 +1,4 @@
-# GitHub File Explorer
+## Explorador de arquivos de projetos abertos do GitHub 
 
 Um visualizador de arquivos para repositórios públicos do GitHub com uma interface inspirada no VS Code.
 
@@ -9,18 +9,18 @@ Um visualizador de arquivos para repositórios públicos do GitHub com uma inter
 1.  **Instale o pacote:**
 
     ```bash
-    npm install @seu-usuario/git-file-explorer
+    npm install github-project-file-explorer
     ```
 
 2.  **Importe o componente e o CSS:**
 
     ```tsx
-    import { Index as GitExplorer } from '@seu-usuario/git-file-explorer';
-    import '@seu-usuario/git-file-explorer/dist/style.css';
+    import { Index as GitHubFilesExplorer } from 'github-project-file-explorer';
+    import 'github-project-file-explorer/dist/style.css';
 
     function App() {
       return (
-        <GitExplorer 
+        <GitHubFilesExplorer 
           repoUrls={["https://github.com/facebook/react", "https://github.com/vercel/next.js"]}
           cssWrapper="min-h-[600px] border rounded-lg"
         />
