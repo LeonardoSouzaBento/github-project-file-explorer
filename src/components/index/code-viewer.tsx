@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import type { GitHubItem } from "@/lib/github";
 import { fetchFileContent, getLanguageFromFilename } from "@/lib/github";
 import { Loader2, X } from "lucide-react";
+import { useEffect } from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface Tab {
   item: GitHubItem;

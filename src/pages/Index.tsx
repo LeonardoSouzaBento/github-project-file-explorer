@@ -1,27 +1,34 @@
-import { CodeViewer } from "@/components/CodeViewer";
-import { FileTree } from "@/components/FileTree";
-import { AddLinkButton } from "@/components/index/add-link-button";
-import { ApiAlert } from "@/components/index/api-alert";
-import { CloseInputButton } from "@/components/index/close-input-button";
-import { RepoGroup } from "@/components/index/repo-group";
-import { StatusBar } from "@/components/index/status-bar";
-import { parseRepoUrl, type GitHubItem } from "@/lib/github";
+import { CodeViewer } from "@/components/index/code-viewer";
+import {
+  AddLinkButton,
+  CloseInputButton,
+  FileExplorer,
+  InputArea,
+  RepoGroup,
+  StatusBar,
+  TitleBar,
+} from "@/components/index/index";
+import { fetchAllFiles, parseRepoUrl, type GitHubItem } from "@/lib/github";
 import { type SavedRepo, type Tab } from "@/types";
-import { FolderGit2, Github, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 const MAX_BUTTON_CHARS = 18;
 
 function truncateName(name: string) {
-  return name.length > MAX_BUTTON_CHARS ? name.slice(0, MAX_BUTTON_CHARS) + "..." : name;
+  return name.length > MAX_BUTTON_CHARS
+    ? name.slice(0, MAX_BUTTON_CHARS) + "..."
+    : name;
 }
 
-const Index = () => {
+const Index = ({ repoUrls }: { repoUrls: [""] }) => {
   const [repoUrl, setRepoUrl] = useState("");
   const [files, setFiles] = useState<GitHubItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadingMsg, setLoadingMsg] = useState("");
-  const [repoInfo, setRepoInfo] = useState<{ owner: string; repo: string } | null>(null);
+  const [repoInfo, setRepoInfo] = useState<{
+    owner: string;
+    repo: string;
+  } | null>(null);
 
   const [selectedFile, setSelectedFile] = useState<GitHubItem | null>(null);
   const [tabs, setTabs] = useState<Tab[]>([]);
@@ -36,6 +43,75 @@ const Index = () => {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const addLinkBtnRef = useRef<HTMLButtonElement>(null);
+
+  const handleAddRepo = async (url: string) => {
+    const parsed = parseRepoUrl(url);
+    if (!parsed) {
+      setInputError(
+        "URL inválida. Use: https://github.com/usuario/repositorio"
+      );
+      setInputSuccess("");
+      return;
+    }
+
+    if (
+      savedRepos.some((r) => r.owner === parsed.owner && r.repo === parsed.repo)
+    ) {
+      setInputError("Repositório já adicionado");
+      setInputSuccess("");
+      return;
+    }
+
+    setInputError("");
+    setInputSuccess("");
+    setLoading(true);
+    setFiles([]);
+    setTabs([]);
+    setActiveTab(null);
+    setSelectedFile(null);
+    setRepoInfo(parsed);
+
+    try {
+      const allFiles = await fetchAllFiles(
+        parsed.owner,
+        parsed.repo,
+        "",
+        setLoadingMsg
+      );
+      setFiles(allFiles);
+
+      const newRepo: SavedRepo = {
+        url: url,
+        name: parsed.repo,
+        owner: parsed.owner,
+        repo: parsed.repo,
+      };
+      setSavedRepos((prev) => [...prev, newRepo]);
+      setActiveRepoUrl(url);
+      setInputSuccess("Repositório adicionado com sucesso!");
+      setRepoUrl("");
+      setTimeout(() => {
+        setShowInput(false);
+        setInputSuccess("");
+      }, 1000);
+    } catch (err) {
+      setInputError(err.message || "Erro ao buscar repositório");
+    } finally {
+      setLoading(false);
+      setLoadingMsg("");
+    }
+  };
+
+  useEffect(() => {
+    const loadInitialRepos = async () => {
+      for (const url of repoUrls) {
+        if (url) {
+          await handleAddRepo(url);
+        }
+      }
+    };
+    loadInitialRepos();
+  }, [repoUrls]);
 
   // Auto-extract project name from input
   useEffect(() => {
@@ -67,64 +143,31 @@ const Index = () => {
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       {/* Title Bar */}
-      <div className="flex items-center gap-2 px-4 py-2 bg-vscode-titlebar border-b border-border">
-        <Github className="w-4 h-4 text-foreground" />
-        <span className="text-sm font-medium text-foreground">GitHub File Viewer</span>
-        {repoInfo && (
-          <span className="text-xs text-muted-foreground ml-2">
-            — {repoInfo.owner}/{repoInfo.repo}
-          </span>
-        )}
-      </div>
+      <TitleBar repoInfo={repoInfo} />
 
       {/* Repo Bar */}
       <div className="flex items-center gap-0 bg-vscode-activitybar border-b border-border h-12 relative">
         {showingInput ? (
           <div className="flex-1 flex items-center gap-2 px-4 py-2 relative">
-            <div className="flex-1 flex items-center gap-2 bg-vscode-input-bg border border-vscode-input-border rounded px-3 py-2 relative">
-              <FolderGit2 className="w-4 h-4 text-muted-foreground shrink-0" />
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder="Cole o link do repositório público (ex: https://github.com/facebook/react)"
-                value={repoUrl}
-                onChange={(e) => {
-                  setRepoUrl(e.target.value);
-                  setInputError("");
-                  setInputSuccess("");
-                }}
-                onKeyDown={handleKeyDown}
-                className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none font-mono"
-                disabled={loading}
-              />
-              {previewName && (
-                <span className="text-xs text-muted-foreground shrink-0 font-mono">
-                  {truncateName(previewName)}
-                </span>
-              )}
-
-              {/* Error/Success overlay */}
-              <ApiAlert inputError={inputError} inputSuccess={inputSuccess} />
-            </div>
-
-            <AddLinkButton
-              ref={addLinkBtnRef}
-              loading={loading}
+            <InputArea
+              inputRef={inputRef}
               repoUrl={repoUrl}
-              savedRepos={savedRepos}
               setRepoUrl={setRepoUrl}
               setInputError={setInputError}
               setInputSuccess={setInputSuccess}
-              setLoading={setLoading}
-              setFiles={setFiles}
-              setTabs={setTabs}
-              setActiveTab={setActiveTab}
-              setSelectedFile={setSelectedFile}
-              setRepoInfo={setRepoInfo}
-              setLoadingMsg={setLoadingMsg}
-              setSavedRepos={setSavedRepos}
-              setActiveRepoUrl={setActiveRepoUrl}
-              setShowInput={setShowInput}
+              handleKeyDown={handleKeyDown}
+              loading={loading}
+              previewName={previewName}
+              truncateName={truncateName}
+              inputError={inputError}
+              inputSuccess={inputSuccess}
+            />
+
+            <AddLinkButton
+              ref={addLinkBtnRef}
+              onClick={() => handleAddRepo(repoUrl)}
+              loading={loading}
+              disabled={!repoUrl.trim()}
             />
 
             {savedRepos.length > 0 && (
@@ -160,39 +203,13 @@ const Index = () => {
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Sidebar */}
-        <div className="w-64 shrink-0 bg-vscode-sidebar border-r border-border flex flex-col overflow-hidden">
-          <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b border-border">
-            Explorer
-          </div>
-          <div className="flex-1 overflow-auto py-1">
-            {loading && (
-              <div className="flex flex-col items-center justify-center h-full gap-3 px-4">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                <p className="text-xs text-muted-foreground text-center">{loadingMsg}</p>
-                <div className="loading-dots flex gap-1">
-                  <span className="w-1.5 h-1.5 bg-primary rounded-full" />
-                  <span className="w-1.5 h-1.5 bg-primary rounded-full" />
-                  <span className="w-1.5 h-1.5 bg-primary rounded-full" />
-                </div>
-              </div>
-            )}
-            {!loading && files.length === 0 && (
-              <div className="flex flex-col items-center justify-center h-full gap-2 px-4 text-muted-foreground">
-                <FolderGit2 className="w-10 h-10 opacity-30" />
-                <p className="text-xs text-center">
-                  Adicione um link de repositório público para começar
-                </p>
-              </div>
-            )}
-            {!loading && files.length > 0 && (
-              <FileTree
-                items={files}
-                onFileSelect={setSelectedFile}
-                selectedPath={activeTab || undefined}
-              />
-            )}
-          </div>
-        </div>
+        <FileExplorer
+          loading={loading}
+          loadingMsg={loadingMsg}
+          files={files}
+          onFileSelect={setSelectedFile}
+          activeTab={activeTab}
+        />
 
         {/* Editor */}
         <CodeViewer
