@@ -9,6 +9,7 @@ import {
   TitleBar,
 } from "@/components/index/index";
 import { fetchAllFiles, parseRepoUrl, type GitHubItem } from "@/lib/github";
+import { cn } from "@/lib/utils";
 import { type SavedRepo, type Tab } from "@/types";
 import { useEffect, useRef, useState } from "react";
 
@@ -20,7 +21,13 @@ function truncateName(name: string) {
     : name;
 }
 
-const Index = ({ repoUrls }: { repoUrls: [""] }) => {
+const Index = ({
+  repoUrls,
+  cssWrapper,
+}: {
+  repoUrls: string[];
+  cssWrapper: string;
+}) => {
   const [repoUrl, setRepoUrl] = useState("");
   const [files, setFiles] = useState<GitHubItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -141,7 +148,7 @@ const Index = ({ repoUrls }: { repoUrls: [""] }) => {
   const showingInput = showInput || savedRepos.length === 0;
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
+    <div className={cn("h-screen flex flex-col overflow-hidden", cssWrapper)}>
       {/* Title Bar */}
       <TitleBar repoInfo={repoInfo} />
 
